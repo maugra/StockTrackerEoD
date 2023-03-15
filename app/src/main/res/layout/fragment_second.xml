@@ -15,14 +15,26 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
-            android:id="@+id/linearLayout"
-            android:layout_width="wrap_content"
+
+        <EditText
+            android:id="@+id/symbol_input"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="@string/symbol_hint"
+            android:inputType=""
+            android:text="" />
 
 
-        </LinearLayout>
+        <EditText
+            android:id="@+id/amount_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="@string/amount_hint"
+            android:inputType="numberDecimal" />
 
         <Button
             android:id="@+id/submit_new_position"
