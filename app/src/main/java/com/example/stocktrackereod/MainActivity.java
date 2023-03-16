@@ -1,36 +1,42 @@
 package com.example.stocktrackereod;
 
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.stocktrackereod.databinding.ActivityMainBinding;
 
-import android.view.Menu;
-import android.view.MenuItem;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
-
+    private final String BASE_URL = "https://api.polygon.io/v2/aggs/ticker/";
+    private final String API_KEY = "2guV5i8O4ZqgNchftZ1WvhIbAqJMPRLf";
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
-
-    private Portfolio portfolio;
+    private final Portfolio portfolio = new Portfolio();
+    RequestQueue requestQueue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        portfolio.updateValueAndDifferential();
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         updatePortfolio();
         setSupportActionBar(binding.toolbar);
+        requestQueue = Volley.newRequestQueue(this);
 
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
@@ -39,6 +45,35 @@ public class MainActivity extends AppCompatActivity {
         binding.addNewPosition.setOnClickListener(view -> {
             navController.navigate(R.id.addSymbolFragment);
         });
+    }
+
+    public void getPriceForPosition(Position position) {
+        requestQueue.add(buildGetPriceRequest(position));
+        requestQueue.start();
+    }
+
+    private JsonObjectRequest buildGetPriceRequest(Position position) {
+        JSONObject jsonObject = new JSONObject();
+        return new JsonObjectRequest(Request.Method.GET, constructURL(position.getSymbol()), jsonObject,
+                response -> {
+                    try {
+                        double price = extractClosingPrice(response);
+                        position.updateValueAndDifferential(price);
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
+                },
+                error -> {
+                    System.out.println(error.networkResponse.statusCode);
+                });
+    }
+
+    private double extractClosingPrice(JSONObject jsonObject) throws JSONException {
+        return jsonObject.getJSONArray("results").getJSONObject(0).getDouble("c");
+    }
+
+    private String constructURL(String symbol) {
+        return BASE_URL + symbol + "/prev?adjusted=true&apiKey=" + API_KEY;
     }
 
     @Override
@@ -71,9 +106,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void updatePortfolio(){
+    public void updatePortfolio() {
         Set<Position> positions = this.portfolio.getPositions();
-        positions.forEach(Position::updateValueAndDifferential);
+        positions.forEach(this::getPriceForPosition);
         this.portfolio.updateValueAndDifferential();
     }
 }

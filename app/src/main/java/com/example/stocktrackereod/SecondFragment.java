@@ -11,6 +11,8 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.stocktrackereod.databinding.FragmentSecondBinding;
 
+import java.util.Objects;
+
 public class SecondFragment extends Fragment {
 
     private FragmentSecondBinding binding;
@@ -29,8 +31,16 @@ public class SecondFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        binding.submitNewPosition.setOnClickListener(view1 -> NavHostFragment.findNavController(SecondFragment.this)
-                .navigate(R.id.action_SecondFragment_to_FirstFragment));
+        binding.submitNewPosition.setOnClickListener(view1 -> {
+            String symbol = binding.symbolInput.getText().toString();
+            int amount = Integer.parseInt(binding.amountInput.getText().toString());
+            Position position = new Position();
+            position.setSymbol(symbol);
+            position.setAmount(amount);
+            ((MainActivity) Objects.requireNonNull(getActivity())).getPriceForPosition(position);
+            NavHostFragment.findNavController(SecondFragment.this)
+                    .navigate(R.id.action_SecondFragment_to_FirstFragment);
+        });
     }
 
     @Override

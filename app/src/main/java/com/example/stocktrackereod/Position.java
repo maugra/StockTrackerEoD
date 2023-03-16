@@ -1,11 +1,11 @@
 package com.example.stocktrackereod;
 
 public class Position {
-    private String symbol;
-    private int amount;
-    private double currentValue;
-    private double previousValue;
-    private double differential;
+    private String symbol = "";
+    private int amount = 0;
+    private double currentValue = 0;
+    private double previousValue = 0;
+    private double differential = 0;
     private final PositionService positionService = new PositionService();
 
     public String getSymbol() {
@@ -52,8 +52,8 @@ public class Position {
         return positionService;
     }
 
-    public void updateValueAndDifferential(){
-        double newCurrentValue = positionService.calculateCurrentValue(this);
+    public void updateValueAndDifferential(double price){
+        double newCurrentValue = price * this.getAmount();
         if (newCurrentValue != this.previousValue){
             this.previousValue = this.currentValue;
             this.currentValue = newCurrentValue;
