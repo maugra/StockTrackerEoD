@@ -9,7 +9,7 @@ public class PositionService {
     }
 
     public double calculateDifferential(Position position) {
-        return position.getPreviousValue() / position.getCurrentValue();
+        return position.getPreviousValue() / position.getCurrentValue() * 100;
     }
 
     private double getPrice(String symbol){
