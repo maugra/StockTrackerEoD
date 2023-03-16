@@ -10,5 +10,6 @@
     <string name="submit_new_position">Add new Position</string>
     <string name="symbol_hint">symbol</string>
     <string name="amount_hint">amount</string>
+    <string name="remove">Remove</string>
 
 </resources>
