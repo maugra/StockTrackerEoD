@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.stocktrackereod.databinding.FragmentSecondBinding;
+import com.example.stocktrackereod.position.Position;
 
 import java.util.Objects;
 

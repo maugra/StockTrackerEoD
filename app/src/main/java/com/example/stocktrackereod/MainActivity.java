@@ -15,6 +15,8 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.stocktrackereod.databinding.ActivityMainBinding;
+import com.example.stocktrackereod.portfolio.Portfolio;
+import com.example.stocktrackereod.position.Position;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -37,11 +39,9 @@ public class MainActivity extends AppCompatActivity {
         updatePortfolio();
         setSupportActionBar(binding.toolbar);
         requestQueue = Volley.newRequestQueue(this);
-
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-
         binding.addNewPosition.setOnClickListener(view -> {
             navController.navigate(R.id.addSymbolFragment);
         });

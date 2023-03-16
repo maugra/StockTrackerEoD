@@ -1,4 +1,4 @@
-package com.example.stocktrackereod;
+package com.example.stocktrackereod.position;
 
 public class Position {
     private String symbol = "";

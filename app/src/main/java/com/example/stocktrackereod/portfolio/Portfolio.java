@@ -1,4 +1,6 @@
-package com.example.stocktrackereod;
+package com.example.stocktrackereod.portfolio;
+
+import com.example.stocktrackereod.position.Position;
 
 import java.util.HashSet;
 import java.util.Set;

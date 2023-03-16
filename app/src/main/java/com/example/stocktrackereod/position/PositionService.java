@@ -1,4 +1,4 @@
-package com.example.stocktrackereod;
+package com.example.stocktrackereod.position;
 
 public class PositionService {
     private final String BASE_URL = "https://api.polygon.io/v2/aggs/ticker/";
