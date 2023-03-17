@@ -34,7 +34,7 @@ public class FirstFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        MainActivity mainActivity = (MainActivity) Objects.requireNonNull(getActivity());
+        MainActivity mainActivity = (MainActivity) requireActivity();
 
         RecyclerView recyclerView = view.findViewById(R.id.positions_list);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
@@ -46,7 +46,7 @@ public class FirstFragment extends Fragment {
     @Override
     public void onResume(){
         super.onResume();
-        MainActivity mainActivity = (MainActivity) Objects.requireNonNull(getActivity());
+        MainActivity mainActivity = (MainActivity) requireActivity();
         mainActivity.updatePortfolio();
 
     }

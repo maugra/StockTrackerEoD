@@ -37,7 +37,7 @@ public class SecondFragment extends Fragment {
             Position position = new Position();
             position.setSymbol(symbol);
             position.setAmount(amount);
-            MainActivity mainActivity = (MainActivity) Objects.requireNonNull(getActivity());
+            MainActivity mainActivity = (MainActivity) requireActivity();
             mainActivity.getPriceForPosition(position);
             mainActivity.getPortfolio().getPositions().add(position);
             mainActivity.dataSetChanged();
@@ -48,7 +48,7 @@ public class SecondFragment extends Fragment {
 
     @Override
     public void onDestroyView() {
-        MainActivity mainActivity = (MainActivity) Objects.requireNonNull(getActivity());
+        MainActivity mainActivity = (MainActivity) requireActivity();
         mainActivity.updatePortfolio();
         super.onDestroyView();
         binding = null;

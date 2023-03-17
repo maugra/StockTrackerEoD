@@ -23,7 +23,8 @@
             android:layout_weight="1"
             android:ems="10"
             android:hint="@string/symbol_hint"
-            android:inputType="" />
+            android:inputType=""
+            android:autofillHints="symbol" />
 
 
         <EditText
@@ -33,7 +34,8 @@
             android:layout_weight="1"
             android:ems="10"
             android:hint="@string/amount_hint"
-            android:inputType="numberDecimal" />
+            android:inputType="numberDecimal"
+            android:autofillHints="amount" />
 
         <Button
             android:id="@+id/submit_new_position"
