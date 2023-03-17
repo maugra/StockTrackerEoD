@@ -2,7 +2,7 @@ package com.example.stocktrackereod;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.os.Build;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
@@ -24,6 +24,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.stocktrackereod.databinding.ActivityMainBinding;
 import com.example.stocktrackereod.portfolio.Portfolio;
 import com.example.stocktrackereod.position.Position;
+import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private final String API_KEY = "2guV5i8O4ZqgNchftZ1WvhIbAqJMPRLf";
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
-    private final Portfolio portfolio = new Portfolio();
+    private  Portfolio portfolio = new Portfolio();
     RequestQueue requestQueue;
     private PositionsAdapter adapter;
 
@@ -45,7 +46,10 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         RecyclerView positionsList = findViewById(R.id.positions_list);
-
+        if (getPortfolioFromSharedPreferences(this.getBaseContext()) != null) {
+            portfolio = getPortfolioFromSharedPreferences(this.getBaseContext());
+        }
+        //TODO: Remove hardcoded entries
         Position position = new Position();
         position.setSymbol("AAPL");
         position.setAmount(10);
@@ -75,6 +79,12 @@ public class MainActivity extends AppCompatActivity {
             navController.navigate(R.id.addSymbolFragment);
         });
         vibrate();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        savePortfolioToSharedPreferences(this.getBaseContext(), portfolio);
     }
 
     public void getPriceForPosition(Position position) {
@@ -156,6 +166,24 @@ public class MainActivity extends AppCompatActivity {
         Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         VibrationEffect vibrationEffect = VibrationEffect.createOneShot(400, VibrationEffect.DEFAULT_AMPLITUDE);
         vibrator.vibrate(vibrationEffect);
+    }
+
+    public void savePortfolioToSharedPreferences(Context context, Portfolio portfolio) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("MyPreferences", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        Gson gson = new Gson();
+        String jsonPortfolio = gson.toJson(portfolio);
+        editor.putString("portfolio", jsonPortfolio);
+        editor.apply();
+    }
+
+    public Portfolio getPortfolioFromSharedPreferences(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("MyPreferences", Context.MODE_PRIVATE);
+        String json = sharedPreferences.getString("myObject", null);
+
+        Gson gson = new Gson();
+        return gson.fromJson(json, Portfolio.class);
     }
 
 
