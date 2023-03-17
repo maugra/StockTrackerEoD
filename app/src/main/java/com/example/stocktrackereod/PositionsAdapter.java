@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.stocktrackereod.position.Position;
 
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,7 +35,8 @@ public class PositionsAdapter extends
         TextView symbolTextView = holder.symbolTextView;
         symbolTextView.setText(position.getSymbol());
         TextView differentialTextView = holder.differentialTextView;
-        differentialTextView.setText(String.valueOf(position.getDifferential()).concat("%"));
+        String differentialText = String.format("%.2f", position.getDifferential()) + "%";
+        differentialTextView.setText(differentialText);
 
     }
 

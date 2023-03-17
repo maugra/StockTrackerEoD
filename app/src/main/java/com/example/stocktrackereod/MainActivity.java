@@ -28,6 +28,7 @@ import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -126,8 +127,11 @@ public class MainActivity extends AppCompatActivity {
         this.portfolio.updateValueAndDifferential();
         TextView portfolioValue =  findViewById(R.id.portfolio_value);
         TextView portfolioDiff = findViewById(R.id.portfolio_diff);
-        portfolioValue.setText(String.valueOf(portfolio.getCurrentPortfolioValue()));
-        portfolioDiff.setText(String.valueOf(portfolio.getPortfolioDifferential()));
+        String portfolioValueText = String.format("%.2f", portfolio.getCurrentPortfolioValue()) + " USD";
+
+        portfolioValue.setText(portfolioValueText);
+        String portfolioDifferential =  String.format("%.2f", portfolio.getPortfolioDifferential())  + "%";
+        portfolioDiff.setText(portfolioDifferential);
         dataSetChanged();
 
     }
