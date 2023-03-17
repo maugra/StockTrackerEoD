@@ -1,6 +1,11 @@
 package com.example.stocktrackereod;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -9,6 +14,8 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -21,7 +28,7 @@ import com.example.stocktrackereod.position.Position;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Set;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private final String BASE_URL = "https://api.polygon.io/v2/aggs/ticker/";
@@ -30,21 +37,44 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private final Portfolio portfolio = new Portfolio();
     RequestQueue requestQueue;
+    private PositionsAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        updatePortfolio();
+        RecyclerView positionsList = findViewById(R.id.positions_list);
+
+        Position position = new Position();
+        position.setSymbol("AAPL");
+        position.setAmount(10);
+        position.setDifferential(0);
+        position.setPreviousValue(1500);
+        position.setCurrentValue(1600);
+        Position position1 = new Position();
+        position1.setSymbol("ONON");
+        position1.setAmount(10);
+        position1.setDifferential(0);
+        position1.setPreviousValue(1500);
+        position1.setCurrentValue(1600);
+        portfolio.getPositions().add(position1);
+        portfolio.getPositions().add(position);
+
+        adapter = new PositionsAdapter(portfolio.getPositions());
+        adapter = new PositionsAdapter(portfolio.getPositions());
+        positionsList.setAdapter(adapter);
+        positionsList.setLayoutManager(new LinearLayoutManager(this));
         setSupportActionBar(binding.toolbar);
         requestQueue = Volley.newRequestQueue(this);
+        updatePortfolio();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         binding.addNewPosition.setOnClickListener(view -> {
             navController.navigate(R.id.addSymbolFragment);
         });
+        vibrate();
     }
 
     public void getPriceForPosition(Position position) {
@@ -64,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 },
                 error -> {
-                    System.out.println(error.networkResponse.statusCode);
+                    System.out.println("That didn't work");
                 });
     }
 
@@ -107,8 +137,26 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void updatePortfolio() {
-        Set<Position> positions = this.portfolio.getPositions();
+        List<Position> positions = this.portfolio.getPositions();
         positions.forEach(this::getPriceForPosition);
         this.portfolio.updateValueAndDifferential();
+        dataSetChanged();
     }
+
+    public Portfolio getPortfolio() {
+        return this.portfolio;
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void dataSetChanged() {
+        this.adapter.notifyDataSetChanged();
+    }
+
+    private void vibrate() {
+        Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        VibrationEffect vibrationEffect = VibrationEffect.createOneShot(400, VibrationEffect.DEFAULT_AMPLITUDE);
+        vibrator.vibrate(vibrationEffect);
+    }
+
+
 }

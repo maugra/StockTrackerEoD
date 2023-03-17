@@ -2,21 +2,21 @@ package com.example.stocktrackereod.portfolio;
 
 import com.example.stocktrackereod.position.Position;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Portfolio {
-    private Set<Position> positions = new HashSet<>();
+    private List<Position> positions = new ArrayList<>();
     private double currentPortfolioValue;
     private double previousPortfolioValue;
     private double portfolioDifferential;
     private final PortfolioService portfolioService = new PortfolioService();
 
-    public Set<Position> getPositions() {
+    public List<Position> getPositions() {
         return positions;
     }
 
-    public void setPositions(Set<Position> positions) {
+    public void setPositions(List<Position> positions) {
         this.positions = positions;
     }
 

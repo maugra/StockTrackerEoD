@@ -31,14 +31,16 @@ public class SecondFragment extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         binding.submitNewPosition.setOnClickListener(view1 -> {
             String symbol = binding.symbolInput.getText().toString();
             int amount = Integer.parseInt(binding.amountInput.getText().toString());
             Position position = new Position();
             position.setSymbol(symbol);
             position.setAmount(amount);
-            ((MainActivity) Objects.requireNonNull(getActivity())).getPriceForPosition(position);
+            MainActivity mainActivity = (MainActivity) Objects.requireNonNull(getActivity());
+            mainActivity.getPriceForPosition(position);
+            mainActivity.getPortfolio().getPositions().add(position);
+            mainActivity.dataSetChanged();
             NavHostFragment.findNavController(SecondFragment.this)
                     .navigate(R.id.action_SecondFragment_to_FirstFragment);
         });
