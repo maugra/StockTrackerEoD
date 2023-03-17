@@ -6,8 +6,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -50,21 +48,28 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(binding.toolbar);
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
-
         RecyclerView positionsList = findViewById(R.id.positions_list);
-        if (getPortfolioFromSharedPreferences(this.getBaseContext()) != null) {
-            portfolio = getPortfolioFromSharedPreferences(this.getBaseContext());
-        }
-
-        adapter = new PositionsAdapter(portfolio.getPositions());
-        positionsList.setAdapter(adapter);
-        positionsList.setLayoutManager(new LinearLayoutManager(this));
-
+        portfolio = retrievePortfolio();
+        setupAdapter(positionsList);
+        updatePortfolio();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         binding.addNewPosition.setOnClickListener(view -> {
             navController.navigate(R.id.addSymbolFragment);
         });
         vibrate();
+    }
+
+    private Portfolio retrievePortfolio() {
+        if (getPortfolioFromSharedPreferences(this.getBaseContext()) != null) {
+            return getPortfolioFromSharedPreferences(this.getBaseContext());
+        }
+        return new Portfolio();
+    }
+
+    private void setupAdapter(RecyclerView positionsList) {
+        adapter = new PositionsAdapter(portfolio.getPositions());
+        positionsList.setAdapter(adapter);
+        positionsList.setLayoutManager(new LinearLayoutManager(this));
     }
 
     @Override
@@ -85,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
                     try {
                         double price = extractClosingPrice(response);
                         position.updateValueAndDifferential(price);
-                        porcessNewValues();
+                        processNewValues();
 
                     } catch (JSONException e) {
                         throw new RuntimeException(e);
@@ -117,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
         positions.forEach(this::getPriceForPosition);
     }
 
-    private void porcessNewValues() {
+    private void processNewValues() {
         this.portfolio.updateValueAndDifferential();
         TextView portfolioValue =  findViewById(R.id.portfolio_value);
         TextView portfolioDiff = findViewById(R.id.portfolio_diff);
@@ -154,8 +159,7 @@ public class MainActivity extends AppCompatActivity {
 
     public Portfolio getPortfolioFromSharedPreferences(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences("MyPreferences", Context.MODE_PRIVATE);
-        String json = sharedPreferences.getString("myObject", null);
-
+        String json = sharedPreferences.getString("portfolio", null);
         Gson gson = new Gson();
         return gson.fromJson(json, Portfolio.class);
     }

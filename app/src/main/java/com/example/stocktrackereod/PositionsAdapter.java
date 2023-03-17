@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.stocktrackereod.position.Position;
 
 import java.util.List;
+import java.util.Optional;
 
 //adapter according to  https://guides.codepath.com/android/using-the-recyclerview#creating-the-recyclerview-adapter
 public class PositionsAdapter extends
@@ -53,6 +54,11 @@ public class PositionsAdapter extends
             symbolTextView = itemView.findViewById(R.id.symbol_text_view);
             differentialTextView = itemView.findViewById(R.id.differential_text_view);
             removeButton = itemView.findViewById(R.id.remove_position_button);
+            removeButton.setOnClickListener(removeButton -> {
+                Optional<Position> position = positions.stream().filter(position1 -> position1.getSymbol() == symbolTextView.getText()).findFirst();
+                position.ifPresent(positions::remove);
+                notifyDataSetChanged();
+            });
         }
     }
 
