@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/MainFragment"
-        android:name="com.example.stocktrackereod.FirstFragment"
+        android:name="com.example.stocktrackereod.OverviewFragment"
         android:label="@string/Stock_tracker_eod_label"
-        tools:layout="@layout/fragment_first">
+        tools:layout="@layout/fragment_overview">
 
         <action
             android:id="@+id/action_FirstFragment_to_SecondFragment"
@@ -17,9 +17,9 @@
     </fragment>
     <fragment
         android:id="@+id/addSymbolFragment"
-        android:name="com.example.stocktrackereod.SecondFragment"
+        android:name="com.example.stocktrackereod.AddPositionFragment"
         android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_second">
+        tools:layout="@layout/fragment_add_position">
 
         <action
             android:id="@+id/action_SecondFragment_to_FirstFragment"

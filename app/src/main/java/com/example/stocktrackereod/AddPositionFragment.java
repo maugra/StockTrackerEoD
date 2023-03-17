@@ -9,14 +9,12 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
-import com.example.stocktrackereod.databinding.FragmentSecondBinding;
+import com.example.stocktrackereod.databinding.FragmentAddPositionBinding;
 import com.example.stocktrackereod.position.Position;
 
-import java.util.Objects;
+public class AddPositionFragment extends Fragment {
 
-public class SecondFragment extends Fragment {
-
-    private FragmentSecondBinding binding;
+    private FragmentAddPositionBinding binding;
 
     @Override
     public View onCreateView(
@@ -24,7 +22,7 @@ public class SecondFragment extends Fragment {
             Bundle savedInstanceState
     ) {
 
-        binding = FragmentSecondBinding.inflate(inflater, container, false);
+        binding = FragmentAddPositionBinding.inflate(inflater, container, false);
         return binding.getRoot();
 
     }
@@ -41,7 +39,7 @@ public class SecondFragment extends Fragment {
             mainActivity.getPriceForPosition(position);
             mainActivity.getPortfolio().getPositions().add(position);
             mainActivity.dataSetChanged();
-            NavHostFragment.findNavController(SecondFragment.this)
+            NavHostFragment.findNavController(AddPositionFragment.this)
                     .navigate(R.id.action_SecondFragment_to_FirstFragment);
         });
     }
