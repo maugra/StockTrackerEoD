@@ -29,6 +29,7 @@ public class FirstFragment extends Fragment {
         return binding.getRoot();
 
     }
+
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -43,9 +44,18 @@ public class FirstFragment extends Fragment {
     }
 
     @Override
+    public void onResume(){
+        super.onResume();
+        MainActivity mainActivity = (MainActivity) Objects.requireNonNull(getActivity());
+        mainActivity.updatePortfolio();
+
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+
     }
 
 }

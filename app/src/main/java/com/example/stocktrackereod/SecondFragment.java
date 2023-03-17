@@ -48,6 +48,8 @@ public class SecondFragment extends Fragment {
 
     @Override
     public void onDestroyView() {
+        MainActivity mainActivity = (MainActivity) Objects.requireNonNull(getActivity());
+        mainActivity.updatePortfolio();
         super.onDestroyView();
         binding = null;
     }

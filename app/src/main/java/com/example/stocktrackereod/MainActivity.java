@@ -59,7 +59,6 @@ public class MainActivity extends AppCompatActivity {
         adapter = new PositionsAdapter(portfolio.getPositions());
         positionsList.setAdapter(adapter);
         positionsList.setLayoutManager(new LinearLayoutManager(this));
-        updatePortfolio();
 
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         binding.addNewPosition.setOnClickListener(view -> {
@@ -86,6 +85,8 @@ public class MainActivity extends AppCompatActivity {
                     try {
                         double price = extractClosingPrice(response);
                         position.updateValueAndDifferential(price);
+                        porcessNewValues();
+
                     } catch (JSONException e) {
                         throw new RuntimeException(e);
                     }
@@ -114,12 +115,16 @@ public class MainActivity extends AppCompatActivity {
     public void updatePortfolio() {
         List<Position> positions = this.portfolio.getPositions();
         positions.forEach(this::getPriceForPosition);
+    }
+
+    private void porcessNewValues() {
         this.portfolio.updateValueAndDifferential();
         TextView portfolioValue =  findViewById(R.id.portfolio_value);
         TextView portfolioDiff = findViewById(R.id.portfolio_diff);
         portfolioValue.setText(String.valueOf(portfolio.getCurrentPortfolioValue()));
         portfolioDiff.setText(String.valueOf(portfolio.getPortfolioDifferential()));
         dataSetChanged();
+
     }
 
     public Portfolio getPortfolio() {
