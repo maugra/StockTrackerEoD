@@ -1,5 +1,6 @@
 package com.example.stocktrackereod;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,7 +36,7 @@ public class PositionsAdapter extends
         TextView symbolTextView = holder.symbolTextView;
         symbolTextView.setText(position.getSymbol());
         TextView differentialTextView = holder.differentialTextView;
-        String differentialText = String.format("%.2f", position.getDifferential()) + "%";
+        @SuppressLint("DefaultLocale") String differentialText = String.format("%.2f", position.getDifferential()) + "%";
         differentialTextView.setText(differentialText);
 
     }
@@ -51,6 +52,7 @@ public class PositionsAdapter extends
         public TextView differentialTextView;
         public Button removeButton;
 
+        @SuppressLint("NotifyDataSetChanged")
         public ViewHolder(View itemView) {
             super(itemView);
             symbolTextView = itemView.findViewById(R.id.symbol_text_view);

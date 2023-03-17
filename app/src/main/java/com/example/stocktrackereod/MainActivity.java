@@ -127,10 +127,10 @@ public class MainActivity extends AppCompatActivity {
         this.portfolio.updateValueAndDifferential();
         TextView portfolioValue =  findViewById(R.id.portfolio_value);
         TextView portfolioDiff = findViewById(R.id.portfolio_diff);
-        String portfolioValueText = String.format("%.2f", portfolio.getCurrentPortfolioValue()) + " USD";
+        @SuppressLint("DefaultLocale") String portfolioValueText = String.format("%.2f", portfolio.getCurrentPortfolioValue()) + " USD";
 
         portfolioValue.setText(portfolioValueText);
-        String portfolioDifferential =  String.format("%.2f", portfolio.getPortfolioDifferential())  + "%";
+        @SuppressLint("DefaultLocale") String portfolioDifferential =  String.format("%.2f", portfolio.getPortfolioDifferential())  + "%";
         portfolioDiff.setText(portfolioDifferential);
         dataSetChanged();
 
