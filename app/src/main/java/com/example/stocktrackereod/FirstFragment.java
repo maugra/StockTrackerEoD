@@ -8,8 +8,12 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.stocktrackereod.databinding.FragmentFirstBinding;
+
+import java.util.Objects;
 
 public class FirstFragment extends Fragment {
 
@@ -28,6 +32,14 @@ public class FirstFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        MainActivity mainActivity = (MainActivity) Objects.requireNonNull(getActivity());
+
+        RecyclerView recyclerView = view.findViewById(R.id.positions_list);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(mainActivity.getAdapter());
+
     }
 
     @Override

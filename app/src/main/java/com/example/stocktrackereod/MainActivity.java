@@ -8,6 +8,7 @@ import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -45,35 +46,21 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        requestQueue = Volley.newRequestQueue(this);
+        setSupportActionBar(binding.toolbar);
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
+        appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
+
         RecyclerView positionsList = findViewById(R.id.positions_list);
         if (getPortfolioFromSharedPreferences(this.getBaseContext()) != null) {
             portfolio = getPortfolioFromSharedPreferences(this.getBaseContext());
         }
-        //TODO: Remove hardcoded entries
-        Position position = new Position();
-        position.setSymbol("AAPL");
-        position.setAmount(10);
-        position.setDifferential(0);
-        position.setPreviousValue(1500);
-        position.setCurrentValue(1600);
-        Position position1 = new Position();
-        position1.setSymbol("ONON");
-        position1.setAmount(10);
-        position1.setDifferential(0);
-        position1.setPreviousValue(1500);
-        position1.setCurrentValue(1600);
-        portfolio.getPositions().add(position1);
-        portfolio.getPositions().add(position);
 
-        adapter = new PositionsAdapter(portfolio.getPositions());
         adapter = new PositionsAdapter(portfolio.getPositions());
         positionsList.setAdapter(adapter);
         positionsList.setLayoutManager(new LinearLayoutManager(this));
-        setSupportActionBar(binding.toolbar);
-        requestQueue = Volley.newRequestQueue(this);
         updatePortfolio();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-        appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
+
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         binding.addNewPosition.setOnClickListener(view -> {
             navController.navigate(R.id.addSymbolFragment);
@@ -128,6 +115,10 @@ public class MainActivity extends AppCompatActivity {
         List<Position> positions = this.portfolio.getPositions();
         positions.forEach(this::getPriceForPosition);
         this.portfolio.updateValueAndDifferential();
+        TextView portfolioValue =  findViewById(R.id.portfolio_value);
+        TextView portfolioDiff = findViewById(R.id.portfolio_diff);
+        portfolioValue.setText(String.valueOf(portfolio.getCurrentPortfolioValue()));
+        portfolioDiff.setText(String.valueOf(portfolio.getPortfolioDifferential()));
         dataSetChanged();
     }
 
@@ -164,5 +155,8 @@ public class MainActivity extends AppCompatActivity {
         return gson.fromJson(json, Portfolio.class);
     }
 
+    public PositionsAdapter getAdapter(){
+        return this.adapter;
+    }
 
 }
