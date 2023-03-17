@@ -6,6 +6,11 @@ android {
     namespace 'com.example.stocktrackereod'
     compileSdk 33
 
+    lintOptions{
+        disable "ObsoleteSdkInt"
+    }
+
+
     defaultConfig {
         applicationId "com.example.stocktrackereod"
         minSdk 27
