@@ -29,5 +29,6 @@
         android:paddingRight="16dp"
         android:textSize="11sp"
         android:text="@string/remove"
+        android:backgroundTint="#F44336"
         />
 </LinearLayout>

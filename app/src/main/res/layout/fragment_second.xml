@@ -39,6 +39,7 @@
             android:id="@+id/submit_new_position"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:backgroundTint="#4CAF50"
             android:text="@string/submit_new_position" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
